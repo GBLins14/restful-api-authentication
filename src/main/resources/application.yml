@@ -1,0 +1,24 @@
+jwt:
+  secret: "5b32a855f1a57922fdbd9dc4ae5cc33b36b7c2da0d0f4643602d2dd88e864de88843b063"
+  expirationMs: 3600000 # 1 hora
+
+spring:
+  cache:
+    cache-names:
+      - rate-limit-buckets
+    caffeine:
+      spec: maximumSize=1000000,expireAfterAccess=3600s
+
+bucket4j:
+  enabled: true
+  filterConfigCachingEnabled: false
+  filterConfigCacheName: filterConfigCache
+  filters:
+    - name: global-rate-limit
+      rate-limit:
+        capacity: 5
+        refill:
+          tokens: 5
+          duration: 1s
+      cache-key:
+        expression: "#{request.getRemoteAddr()}"

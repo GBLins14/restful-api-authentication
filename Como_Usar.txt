@@ -1,0 +1,92 @@
+CONVIA RESTFUL API - MANUAL BÁSICO
+
+Base URL: http://localhost:8080
+
+-----------------------------------------
+1. AUTENTICAÇÃO
+
+POST /auth/sign-up
+Cria uma nova conta de usuário.
+
+Headers:
+Content-Type: application/json
+
+Body (JSON):
+{
+  "cpf": "12345678901",
+  "name": "Nome do Usuário",
+  "username": "usuario123",
+  "email": "usuario@email.com",
+  "phone": "123456789",
+  "password": "senha123"
+}
+
+Resposta:
+- 201 CREATED: Conta criada com sucesso.
+- 409 CONFLICT: CPF, username, email ou phone já existe.
+
+POST /auth/sign-in
+Faz login usando username ou email.
+
+Headers:
+Content-Type: application/json
+
+Body (JSON):
+{
+  "login": "usuario123 ou usuario@email.com",
+  "password": "senha123"
+}
+
+Resposta:
+- 200 OK: Retorna JSON com token JWT.
+- 401 UNAUTHORIZED: Senha incorreta ou conta bloqueada.
+- 404 NOT FOUND: Usuário não encontrado.
+
+-----------------------------------------
+2. ROTAS DE ADMINISTRADOR (REQUIRE TOKEN JWT DE ADMIN)
+
+Obs: Todas exigem Header Authorization:
+Authorization: Bearer <token>
+
+GET /admin/accounts
+Lista todas as contas cadastradas.
+
+GET /admin/accounts/{id}
+Lista informações da conta.
+
+PATCH /admin/accounts/role
+Altera o cargo de um usuário.
+
+Body (JSON):
+{
+  "id": 1,
+  "role": "USER" PODE SER -> "USER" OU "CADMIN"
+}
+
+PATCH /admin/accounts/ban
+Bane uma conta por um período de tempo.
+
+Body (JSON):
+{
+  "id": 1,
+  "duration": 5,
+  "unit": "DAYS" PODE SER: SECONDS, MINUTES, HOURS, DAYS, WEEKS, MONTHS, YEARS
+}
+
+Exemplo:
+PATCH /admin/accounts/ban/1/2/DAYS
+Bane o usuário com ID=1 por 2 dias.
+
+PATCH /admin/accounts/unban/{id}
+Desbane uma conta.
+
+DELETE /admin/accounts/{id}
+Deleta a conta de um usuário.
+
+-----------------------------------------
+3. OBSERVAÇÕES
+
+- `unit` para ban pode ser: SECONDS, MINUTES, HOURS, DAYS, WEEKS, MONTHS, YEARS
+- Todos os endpoints que modificam dados exigem token JWT válido de um usuário administrador.
+- Use "Bearer <token>" no header Authorization.
+- Para login, você pode usar username ou email no campo "login".
