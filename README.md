@@ -32,7 +32,7 @@ A API utiliza **JWT** para autenticação e controle de acesso, garantindo segur
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
 | GET    | `/admin/accounts` | Listar todas as contas |
-| PATCH  | `/admin/accounts/setCAdmin` | Definir ou remover privilégios de CAdmin |
+| PATCH  | `/admin/accounts/role` | Definir ou remover privilégios de CAdmin |
 | PATCH  | `/admin/accounts/ban/{id}/{duration}/{unit}` | Banir conta |
 | PATCH  | `/admin/accounts/unban/{id}` | Desbanir conta |
 | DELETE | `/admin/accounts/{id}` | Deletar conta |
